@@ -19,5 +19,6 @@ namespace POS.Utilities.Static
         public const string MESSAGE_TOKEN_ERROR = "El usuario y/o contraseña es incorrecta, rectifica";
         public const string MESSAGE_VALIDATE = "Errores de validacion";
         public const string MESSAGE_FAILED = "Operacion Fallida";
+        public const string MESSAGE_EXCEPTION = "HUBO UN ERROR INESPERADO PLS COMUNICARSE CON EL ADMIN";
     }
 }

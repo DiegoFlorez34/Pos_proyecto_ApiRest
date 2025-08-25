@@ -2,7 +2,7 @@ using POS.Application.Extensions;
 using POS.Application.Validations.Category;
 using POS.Infraestructure.Extensions;
 using POS.Api.Extensions;
-
+using WatchDog;
 using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +46,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//usar el watchlog
+app.UseWatchDogExceptionLogger();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
@@ -53,7 +55,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseWatchDog(configuration =>
+{
+    configuration.WatchPageUsername = Configuration.GetSection("WatchDog:UserName").Value;
+    configuration.WatchPagePassword = Configuration.GetSection("WatchDog:Password").Value;
+});
 app.Run();
 
 
