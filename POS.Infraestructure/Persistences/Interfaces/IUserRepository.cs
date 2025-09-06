@@ -9,7 +9,7 @@ namespace POS.Infraestructure.Persistences.Interfaces
 {
     public interface IUserRepository : IGenericRepository<User>
     {
-        Task<User> AccountByUsername(string userName);
+        Task<User> UserByEmail(string email);
 
 
 

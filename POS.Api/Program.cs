@@ -4,6 +4,7 @@ using POS.Infraestructure.Extensions;
 using POS.Api.Extensions;
 using WatchDog;
 using FluentValidation;
+using POS.Utilities.AppSettings;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -16,6 +17,10 @@ builder.Services.AddInjectionApplication(Configuration);
 builder.Services.AddControllers();
 builder.Services.AddAuthentication(Configuration);
 builder.Services.AddSwagger();
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("GoogleSettings"));
+
+
 
 builder.Services.AddValidatorsFromAssemblyContaining<CategoryValidator>();
 

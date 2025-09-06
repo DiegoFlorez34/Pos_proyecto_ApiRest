@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace POS.Application.Interfaces
 {
-    public interface IUserApplication
+    public  interface IAuthApplication
     {
-        Task<BaseResponse<bool>> RegisterUser(UserRequestDto requestDto);
-        
+        Task<BaseResponse<string>> Login(TokenRequestDto requestDto);
+        Task<BaseResponse<string>> LoginWithGoogle(string credentials);
     }
 }
