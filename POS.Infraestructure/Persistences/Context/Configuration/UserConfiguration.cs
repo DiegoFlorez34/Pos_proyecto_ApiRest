@@ -29,6 +29,9 @@ namespace POS.Infraestructure.Persistences.Context.Configuration
             builder.Property(e => e.UserName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            builder.Property(e => e.AuthType)
+                .HasMaxLength(15)
+                .IsUnicode(false);
         }
     }
 }

@@ -21,5 +21,7 @@ namespace POS.Utilities.Static
         public const string MESSAGE_FAILED = "Operacion Fallida";
         public const string MESSAGE_EXCEPTION = "HUBO UN ERROR INESPERADO PLS COMUNICARSE CON EL ADMIN";
         public const string MESSAGE_GOOGLE_ERROR = "Su cuenta no se encuentra registrada en el sistema";
+        public const string MESSAGE_AUTH_TYPE_GOOGLE = "Porfavor ingrese con la opcion de google";
+        public const string MESSAGE_AUTH_TYPE = "Su cuenta no se encuentra registrada en el sistema";
     }
 }
