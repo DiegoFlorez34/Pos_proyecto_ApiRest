@@ -29,7 +29,7 @@ namespace POS.Application.Extensions
             services.AddScoped<IProviderApplication, ProviderApplication>();
             services.AddWatchDog(configuration);
             services.AddScoped<IAuthApplication, AuthApplication>();
-
+            services.AddScoped<IDocumentTypeApplication, DocumentTypeApplication>();
             
             return services;
 

@@ -12,12 +12,16 @@ namespace POS.Infraestructure.Persistences.Repositories
 
         public IProviderRepository Provider { get; private set; }
 
+        public IDocumentTypeRepository DocumentType { get; private set; }
+
         public UnitOfWork(POSContext context, IUserRepository user)
         {
             _context = context;
             Category = new CategoryRepository(_context);
             User = new UserRepository(_context);
             Provider = new ProviderRepository(_context);
+            DocumentType = new DocumentTypeRepository(_context);
+
             
         }
 

@@ -12,6 +12,7 @@ namespace POS.Infraestructure.Persistences.Interfaces
        ICategoryRepository Category { get; }
         IUserRepository User { get; }
         IProviderRepository Provider { get; }
+        IDocumentTypeRepository DocumentType { get; }
         void SaveChange();
         Task SaveChangeAsync();
 
