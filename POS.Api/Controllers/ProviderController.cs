@@ -4,23 +4,32 @@ using Microsoft.AspNetCore.Mvc;
 using POS.Application.Dtos.Provider.Request;
 using POS.Application.Interfaces;
 using POS.Infraestructure.Commons.Bases.Request;
+using POS.Utilities.Static;
 
 namespace POS.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProviderController : ControllerBase
     {
         private readonly IProviderApplication _providerApplication;
-        public ProviderController(IProviderApplication providerApplication)
+        private readonly IGenerateExelApplication _generateExelApplication;
+        public ProviderController(IProviderApplication providerApplication, IGenerateExelApplication generateExelApplication)
         {
             _providerApplication = providerApplication;
+            _generateExelApplication = generateExelApplication;
         }
         [HttpGet]
         public async Task<IActionResult> ListProviders([FromQuery] BaseFiltersRequest filters)
         {
             var response = await _providerApplication.ListProviders(filters);
+            if ((bool)filters.Download!)
+            {
+                var columnNames = ExelColumnNames.GetColumnsProviders();
+                var fileBytes = _generateExelApplication.GenerateToExel(response.Data!, columnNames);
+                return File(fileBytes, ContentType.ContentTypeExel);
+            }
             return Ok(response);
         }
         [HttpGet("{providerId:int}") ]

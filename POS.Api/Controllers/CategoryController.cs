@@ -4,27 +4,34 @@ using Microsoft.AspNetCore.Mvc;
 using POS.Application.Dtos.Category.Request;
 using POS.Application.Interfaces;
 using POS.Infraestructure.Commons.Bases.Request;
+using POS.Utilities.Static;
 using System.Text.Json;
 
 namespace POS.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryApplication _categoryApplication;
-        public CategoryController(ICategoryApplication categoryApplication)
+        private readonly IGenerateExelApplication _generateExelApplication;
+        public CategoryController(ICategoryApplication categoryApplication, IGenerateExelApplication generateExelApplication)
         {
             _categoryApplication = categoryApplication;
+            _generateExelApplication = generateExelApplication;
         }
-        [HttpPost]
-        public async Task<IActionResult> ListCategories([FromBody]BaseFiltersRequest filters)
+        [HttpGet]
+        public async Task<IActionResult> ListCategories([FromQuery]BaseFiltersRequest filters)
         {
-            Console.WriteLine("Recibido desde Angular:");
-            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(filters));
-       
+            
             var response = await _categoryApplication.ListCategories(filters);
+            if ((bool)filters.Download!)
+            {
+                var columnNames = ExelColumnNames.GetColumnsCategories();
+                var fileBytes = _generateExelApplication.GenerateToExel(response.Data!,columnNames);
+                return File(fileBytes,ContentType.ContentTypeExel);
+            }
             return Ok(response);
         }
         [HttpGet("Select")]

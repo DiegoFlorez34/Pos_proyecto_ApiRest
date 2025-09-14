@@ -22,7 +22,7 @@ namespace POS.Application.Extensions
             //});
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
+            services.AddScoped<IGenerateExelApplication, GenerateExelApplication>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddScoped<ICategoryApplication,CategoryApplication>();
             services.AddScoped<IUserApplication, UserApplication>();

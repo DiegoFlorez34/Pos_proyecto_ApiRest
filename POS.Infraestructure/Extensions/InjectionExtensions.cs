@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using POS.Infraestructure.FileExel;
 using POS.Infraestructure.Persistences.Context;
 using POS.Infraestructure.Persistences.Interfaces;
 using POS.Infraestructure.Persistences.Repositories;
@@ -21,6 +22,7 @@ namespace POS.Infraestructure.Extensions
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             //solucon chathgpt
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddTransient<IGenerateExel, GenerateExel>();
             return services;
 
         }
