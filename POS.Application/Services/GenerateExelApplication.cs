@@ -1,5 +1,4 @@
 ﻿using POS.Application.Interfaces;
-using POS.Infraestructure.Commons.Bases.Response;
 using POS.Infraestructure.FileExel;
 using POS.Utilities.Static;
 
@@ -13,7 +12,7 @@ namespace POS.Application.Services
             _generateExel = generateExel;
         }
 
-        byte[] IGenerateExelApplication.GenerateToExel<T>(BaseEntityResponse<T> data, List<(string ColumnName, string PropertyName)> columns)
+        byte[] IGenerateExelApplication.GenerateToExel<T>(IEnumerable<T> data, List<(string ColumnName, string PropertyName)> columns)
         {
             var exelColumns = ExelColumnNames.GetColumns(columns);
             var memoryStreamExel = _generateExel.GenerateToExel(data,exelColumns);

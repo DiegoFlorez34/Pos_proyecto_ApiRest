@@ -1,4 +1,4 @@
-﻿using POS.Application.Commons.Base;
+﻿using POS.Application.Commons.Base.Response;
 using POS.Application.Dtos.DocumentType.Response;
 using System;
 using System.Collections.Generic;

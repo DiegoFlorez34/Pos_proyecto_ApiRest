@@ -1,4 +1,4 @@
-﻿namespace POS.Infraestructure.Commons.Bases.Request
+﻿namespace POS.Application.Commons.Base.Request
 {
     public class BasePaginationRequest
     {

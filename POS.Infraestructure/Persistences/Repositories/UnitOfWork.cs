@@ -1,29 +1,35 @@
-﻿using POS.Infraestructure.Persistences.Context;
+﻿using POS.Domain.Entities;
+using POS.Infraestructure.Persistences.Context;
 using POS.Infraestructure.Persistences.Interfaces;
+using POS.Infraestructure.Persistenses.Repositories;
 
 namespace POS.Infraestructure.Persistences.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly POSContext _context;
-        public ICategoryRepository Category  { get;private set; }
+       
 
-        public IUserRepository User { get; private set; }
+        public IUserRepository _user = null!;
 
-        public IProviderRepository Provider { get; private set; }
+        public IGenericRepository<Category> _category = null!;
 
-        public IDocumentTypeRepository DocumentType { get; private set; }
+        public IGenericRepository<Provider> _provider = null!;
 
-        public UnitOfWork(POSContext context, IUserRepository user)
+        public IGenericRepository<DocumentType> _documentType = null!;
+
+        public UnitOfWork(POSContext context)
         {
             _context = context;
-            Category = new CategoryRepository(_context);
-            User = new UserRepository(_context);
-            Provider = new ProviderRepository(_context);
-            DocumentType = new DocumentTypeRepository(_context);
 
-            
+
         }
+        public IGenericRepository<Category> Category => _category ?? new GenericRepository<Category>(_context);
+        public IGenericRepository<Provider> Provider => _provider ?? new GenericRepository<Provider>(_context);
+        public IGenericRepository<DocumentType> DocumentType => _documentType ?? new GenericRepository<DocumentType>(_context);
+        public IUserRepository User => _user ?? new UserRepository(_context);
+
+
 
         public void Dispose()
         {

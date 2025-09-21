@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
-using POS.Application.Commons.Base;
+using POS.Application.Commons.Base.Response;
 using POS.Application.Dtos.User.Request;
 using POS.Application.Interfaces;
 using POS.Domain.Entities;

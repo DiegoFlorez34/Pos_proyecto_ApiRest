@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using POS.Application.Commons.Base.Request;
 using POS.Application.Dtos.Provider.Request;
 using POS.Application.Interfaces;
-using POS.Infraestructure.Commons.Bases.Request;
+
 using POS.Utilities.Static;
 
 namespace POS.Api.Controllers

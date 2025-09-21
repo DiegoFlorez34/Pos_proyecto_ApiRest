@@ -1,20 +1,16 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using POS.Application.Commons.Base;
+using Microsoft.EntityFrameworkCore;
+using POS.Application.Commons.Base.Request;
+using POS.Application.Commons.Base.Response;
+using POS.Application.Commons.Ordering;
 using POS.Application.Dtos.Category.Request;
 using POS.Application.Dtos.Category.Response;
 using POS.Application.Interfaces;
 using POS.Application.Validations.Category;
 using POS.Domain.Entities;
-using POS.Infraestructure.Commons.Bases.Request;
-using POS.Infraestructure.Commons.Bases.Response;
+
 using POS.Infraestructure.Persistences.Interfaces;
 using POS.Utilities.Static;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace POS.Application.Services
 {
@@ -23,33 +19,53 @@ namespace POS.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly CategoryValidator _validationRules;
+        private readonly IOrderingQuery _orderingQuery;
 
-
-        public CategoryApplication(IUnitOfWork unitOfWork, IMapper mapper, CategoryValidator validationRules)
+        public CategoryApplication(IUnitOfWork unitOfWork, IMapper mapper, CategoryValidator validationRules, IOrderingQuery orderingQuery)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validationRules = validationRules;
+            _orderingQuery = orderingQuery;
         }
 
-        public async Task<BaseResponse<BaseEntityResponse<CategoryResponseDto>>> ListCategories(BaseFiltersRequest filters)
+        public async Task<BaseResponse<IEnumerable<CategoryResponseDto>>> ListCategories(BaseFiltersRequest filters)
         {
-            var response = new BaseResponse<BaseEntityResponse<CategoryResponseDto>>();
+            var response = new BaseResponse<IEnumerable<CategoryResponseDto>>();
             try
             {
                 
-                var categories = await _unitOfWork.Category.ListCategories(filters);
-                if (categories is not null)
+                var categories =  _unitOfWork.Category.GetAllQueryable();
+                if (filters.NumFilter is not null && !string.IsNullOrEmpty(filters.TextFilter))
                 {
-                    response.IsSuccess = true;
-                    response.Data = _mapper.Map<BaseEntityResponse<CategoryResponseDto>>(categories);
-                    response.Message = ReplyMessage.MESSAGE_QUERY;
+
+                    switch (filters.NumFilter)
+                    {
+                        case 1:
+                            categories = categories.Where(x => x.Name!.Contains(filters.TextFilter));
+                            break;
+                        case 2:
+                            categories = categories.Where(x => x.Description!.Contains(filters.TextFilter));
+                            break;
+                    }
                 }
-                else
+                if (filters.StateFilter is not null)
                 {
-                    response.IsSuccess = false;
-                    response.Message = ReplyMessage.MESSAGE_QUERY_EMPTY;
+                    categories = categories.Where(x => x.State.Equals(filters.StateFilter));
+
                 }
+                if (!string.IsNullOrEmpty(filters.StartDate) && !string.IsNullOrEmpty(filters.EndDate))
+                {
+                    categories = categories.Where(x => x.AuditCreateDate >= Convert.ToDateTime(filters.StartDate) && x.AuditCreateDate <= Convert.ToDateTime(filters.EndDate).AddDays(1));
+                }
+                if (filters.Sort is null) filters.Sort = "Id";
+                var items = await _orderingQuery.Ordering(filters, categories, !(bool)filters.Download!).ToListAsync();
+
+                response.IsSuccess = true;
+                response.TotalRecords = await categories.CountAsync();
+                response.Data = _mapper.Map<IEnumerable<CategoryResponseDto>>(items);
+                response.Message = ReplyMessage.MESSAGE_QUERY;
+               
             }
             catch (Exception EX)
             {

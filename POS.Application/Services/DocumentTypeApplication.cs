@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using POS.Application.Commons.Base;
+using POS.Application.Commons.Base.Response;
 using POS.Application.Dtos.DocumentType.Response;
 using POS.Application.Interfaces;
 using POS.Infraestructure.Persistences.Interfaces;
@@ -28,7 +28,7 @@ namespace POS.Application.Services
             var response = new BaseResponse<IEnumerable<DocumentTypeResponseDto>>();
             try
             {
-                var documentTypes = await _unitOfWork.DocumentType.ListDocumentTypes();
+                var documentTypes = await _unitOfWork.DocumentType.GetSelectAsync();
                 if (documentTypes is not null)
                 {
                     response.Data = _mapper.Map<IEnumerable<DocumentTypeResponseDto>>(documentTypes);

@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POS.Domain.Entities;
-using POS.Infraestructure.Commons.Bases.Request;
-using POS.Infraestructure.Helpers;
 using POS.Infraestructure.Persistences.Context;
 using POS.Infraestructure.Persistences.Interfaces;
 using POS.Utilities.Static;
@@ -86,18 +84,19 @@ namespace POS.Infraestructure.Persistenses.Repositories
             return query;
 
         }
-
-
-        public IQueryable<TDTO> Ordering<TDTO>(BasePaginationRequest request, IQueryable<TDTO> Querable, bool pagination = false) where TDTO : class
+        public IQueryable<T> GetAllQueryable()
         {
-            IQueryable<TDTO> queryDto = request.Order == "desc" ? Querable.OrderBy($"{request.Sort} descending") : Querable.OrderBy($"{request.Sort} ascending");
-            if (pagination)
-            {
-                queryDto = queryDto.Paginate(request);
-            }
-
-            return queryDto;
+            var getAllQuery = GetEntityQuery(x=> x.AuditDeleteUser == null && x.AuditDeleteDate == null);
+            return getAllQuery;
         }
 
+        public async Task<IEnumerable<T>> GetSelectAsync()
+        {
+            var getAll = await _entity
+                .Where(x => x.State.Equals((int)StateTypes.Active))
+                .AsNoTracking()
+                .ToListAsync();
+            return getAll;
+        }
     }
 }

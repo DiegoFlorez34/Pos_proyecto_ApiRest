@@ -1,21 +1,17 @@
-﻿using POS.Infraestructure.Commons.Bases.Request;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using POS.Application.Commons.Base.Request;
 
-namespace POS.Infraestructure.Helpers
+
+namespace POS.Application.Commons.Ordering
 {
-    public static class QueryableHelper
+    public static class PaginateQuery
     {
-        //public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, BasePaginationRequest request)
-        //{
-        //   return queryable.Skip((request.NumPage -1)* request.Records).Take(request.Records);
-
-        //}
         public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, BasePaginationRequest request)
         {
+            //public static IQueryable<T> Paginate<T>(this IQueryable<T> queryable, BasePaginationRequest request)
+            //{
+            //   return queryable.Skip((request.NumPage -1)* request.Records).Take(request.Records);
+
+            //}
             // Si NumPage es <=0, lo ponemos en 1
             var pageNumber = request.NumPage <= 0 ? 1 : request.NumPage;
 
